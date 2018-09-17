@@ -55,4 +55,16 @@ def azure_tts(text,path):
 	with open(path+'-azure.mp3', 'wb') as f:
 	    f.write(rr.content)
 
+def google_tts(textt,path):
+	# To use this method you have to generete your acces json file and put it in your folder
+	os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'./TTSHurtest-31ed111930f6.json'
+	client = texttospeech.TextToSpeechClient()
+	synthesis_input = texttospeech.types.SynthesisInput(
+	    text=textt )
+	voice = texttospeech.types.VoiceSelectionParams(language_code='tr-TR', ssml_gender=texttospeech.enums.SsmlVoiceGender.FEMALE)
+	audio_config = texttospeech.types.AudioConfig(audio_encoding=texttospeech.enums.AudioEncoding.MP3)
+	response = client.synthesize_speech(synthesis_input, voice, audio_config)
+	with open(path+'-google.mp3', 'wb') as out:
+	    out.write(response.audio_content)	  
+
 
