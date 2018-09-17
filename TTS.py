@@ -37,3 +37,22 @@ def amazon_tts(text,path):
 	file.close()
 
 
+def azure_tts(text,path):
+	global azure_api_key
+	apiKey = azure_api_key
+	header = {"Ocp-Apim-Subscription-Key": apiKey}
+	r = requests.post("https://api.cognitive.microsoft.com/sts/v1.0/issueToken", headers = header)
+
+	Authorization = 'Bearer '+ r.text
+
+	header = { "X-Microsoft-OutputFormat" : "audio-16khz-32kbitrate-mono-mp3",
+				"Authorization" : Authorization,
+				"Content-Type" : "application/xml" }
+
+	xml = """<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="tr-TR"><voice xml:lang="tr-TR" name="Microsoft Server Speech Text to Speech Voice (tr-TR, SedaRUS)">{}</voice></speak>"""
+
+	rr= requests.post("https://speech.platform.bing.com/synthesize",  data=xml.format(text) ,headers = header )
+	with open(path+'-azure.mp3', 'wb') as f:
+	    f.write(rr.content)
+
+
