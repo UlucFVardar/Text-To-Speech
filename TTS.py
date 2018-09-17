@@ -68,3 +68,11 @@ def google_tts(textt,path):
 	    out.write(response.audio_content)	  
 
 
+def main():
+	text = []
+	text.append(('Konuşmanın Başlığı','Konuşmanın içeriği.'))
+	for t in text:
+		amazon_tts(t[1],t[0])
+		azure_tts(t[1],t[0])
+		google_tts(t[1],t[0])
+
